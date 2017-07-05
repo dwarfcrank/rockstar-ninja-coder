@@ -78,7 +78,9 @@ export default {
     },
 
     computed: {
-        ...mapState(["unitTypes"]),
+        ...mapState({
+            unitTypes: state => state.game.unitTypes
+        }),
 
         unitTypesSorted() {
             return Object.keys(this.unitTypes)

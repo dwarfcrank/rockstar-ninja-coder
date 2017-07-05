@@ -13,7 +13,7 @@ const developerItem = {
                     <p>
                         <b>Cost:</b> {{ developerInfo.cost }}
                         <br>
-                        <b>Commits/s:</b> {{ developerInfo.commitsPerSecond }}
+                        <b>Commits/s:</b> {{ commitsPerSecond }}
                     </p>
                 </div>
             </div>
@@ -23,10 +23,14 @@ const developerItem = {
     props: ["developerInfo"],
 
     computed: {
-        ...mapGetters(["canHireDeveloper"]),
+        ...mapGetters(["canHireDeveloper", "developerCommitMultiplier"]),
 
         canHire() {
             return this.canHireDeveloper(this.developerInfo.id);
+        },
+
+        commitsPerSecond() {
+            return this.developerInfo.commitsPerSecond * this.developerCommitMultiplier(this.developerInfo.id);
         }
     },
 
@@ -43,6 +47,47 @@ const developerItem = {
     }
 };
 
+const upgradeItem = {
+    template: `
+        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canBuy }"
+            v-bind:style="{ cursor: canBuy ? 'pointer' : '' }" v-on:click="onClick">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 class="list-group-item-heading">{{ upgradeInfo.title }}</h4>
+                    <p class="list-group-item-text">{{ upgradeInfo.description }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <b>Cost:</b> {{ upgradeInfo.cost }}
+                    </p>
+                </div>
+            </div>
+        </div>
+       `,
+
+    props: ["upgradeInfo"],
+
+    computed: {
+        ...mapGetters(["canBuyUpgrade"]),
+
+        canBuy() {
+            return this.canBuyUpgrade(this.upgradeInfo.id);
+        }
+    },
+
+    methods: {
+        ...mapMutations(["buyUpgrade"]),
+
+        onClick() {
+            if (!this.canBuyUpgrade(this.upgradeInfo.id)) {
+                return;
+            }
+
+            this.buyUpgrade(this.upgradeInfo.id);
+        }
+    }
+};
+
 const template = `
 <div class="col-md-5">
     <div class="row">
@@ -50,8 +95,8 @@ const template = `
             <div class="panel-heading">
                 <h3 class="panel-title">Upgrades</h3>
             </div>
-            <div class="panel-body">
-                todo
+            <div class="list-group">
+                <upgrade-item v-for="upgrade in upgradesSorted" v-if="isUpgradeAvailable(upgrade.id)" :key="upgrade.id" v-bind:upgrade-info="upgrade" />
             </div>
         </div>
     </div>
@@ -74,18 +119,28 @@ export default {
     template,
 
     components: {
-        developerItem
+        developerItem,
+        upgradeItem
     },
 
     computed: {
         ...mapState({
-            developerTypes: state => state.game.developerTypes
+            developerTypes: state => state.game.developerTypes,
+            upgrades: state => state.game.upgrades
         }),
+
+        ...mapGetters(["isUpgradeAvailable"]),
 
         developerTypesSorted() {
             return Object.keys(this.developerTypes)
                 .map(key => ({ id: key, ...this.developerTypes[key]}))
                 .sort((a, b) => a.rank - b.rank);
+        },
+
+        upgradesSorted() {
+            return Object.keys(this.upgrades)
+                .map(key => ({ id: key, ...this.upgrades[key] }))
+                .sort((a, b) => a.cost - b.cost);
         }
     }
 };

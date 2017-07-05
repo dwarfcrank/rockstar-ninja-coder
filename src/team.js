@@ -1,3 +1,5 @@
+import { mapState, mapGetters } from "vuex";
+
 const template = `
 <div class="col-md-4">
     <div class="panel panel-default">
@@ -5,7 +7,14 @@ const template = `
             <h3 class="panel-title">Team</h3>
         </div>
         <div class="panel-body">
-            juuh ebin
+            <div class="row">
+                <div class="col-md-8">Commits per second</div>
+                <div class="col-md-4">{{ totalCommitsPerSecond }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">Units</div>
+                <div class="col-md-4">{{ totalUnits }}</div>
+            </div>
         </div>
     </div>
 </div>
@@ -15,7 +24,7 @@ export default {
     name: "team-pane",
     template,
 
-    data() {
-        return {};
+    computed: {
+        ...mapGetters(["totalCommitsPerSecond", "totalUnits"])
     }
 };

@@ -24,6 +24,12 @@ const store = new Vuex.Store({
             return _.reduce(state.unitTypes,
                 (result, unitType) => result + unitType.count * unitType.commitsPerSecond,
                 0);
+        },
+
+        totalUnits(state, getters) {
+            return _.reduce(state.unitTypes,
+                (result, unitType) => result + unitType.count,
+                0);
         }
     },
 

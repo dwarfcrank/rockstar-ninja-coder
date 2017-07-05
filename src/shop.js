@@ -2,11 +2,22 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 const unitItem = {
     template: `
-        <tr v-bind:class="{ success: canBuy }" v-on:click="onClick">
-            <td>{{ unitInfo.title }}</td>
-            <td>{{ unitInfo.cost }}</td>
-            <td>{{ unitInfo.commitsPerSecond }}</td>
-        </tr>`,
+        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canBuy }" v-on:click="onClick">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 class="list-group-item-heading">{{ unitInfo.title }}</h4>
+                    <p class="list-group-item-text">{{ unitInfo.description }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        <b>Cost:</b> {{ unitInfo.cost }}
+                        <br>
+                        <b>Commits/s:</b> {{ unitInfo.commitsPerSecond }}
+                    </p>
+                </div>
+            </div>
+        </div>
+       `,
 
     props: ["unitInfo"],
 
@@ -49,18 +60,9 @@ const template = `
             <div class="panel-heading">
                 <h3 class="panel-title">Human Resources</h3>
             </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Cost</th>
-                        <th>Commits/s</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <unit-item v-for="unit in unitTypesSorted" :key="unit.id" v-bind:unit-info="unit" />
-                </tbody>
-            </table>
+            <div class="list-group">
+                <unit-item v-for="unit in unitTypesSorted" :key="unit.id" v-bind:unit-info="unit" />
+            </div>
         </div>
     </div>
 </div>

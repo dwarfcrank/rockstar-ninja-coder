@@ -2,7 +2,7 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 const unitItem = {
     template: `
-        <tr v-bind:class="{ success: canBuyUnit(unitInfo.id) }" v-on:click="onClick">
+        <tr v-bind:class="{ success: canBuy }" v-on:click="onClick">
             <td>{{ unitInfo.title }}</td>
             <td>{{ unitInfo.cost }}</td>
             <td>{{ unitInfo.commitsPerSecond }}</td>
@@ -11,7 +11,11 @@ const unitItem = {
     props: ["unitInfo"],
 
     computed: {
-        ...mapGetters(["canBuyUnit"])
+        ...mapGetters(["canBuyUnit"]),
+
+        canBuy() {
+            return this.canBuyUnit(this.unitInfo.id);
+        }
     },
 
     methods: {

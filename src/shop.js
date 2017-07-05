@@ -1,44 +1,44 @@
 import { mapState, mapGetters, mapMutations } from "vuex";
 
-const unitItem = {
+const developerItem = {
     template: `
-        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canBuy }"
-            v-bind:style="{ cursor: canBuy ? 'pointer' : '' }" v-on:click="onClick">
+        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canHire }"
+            v-bind:style="{ cursor: canHire ? 'pointer' : '' }" v-on:click="onClick">
             <div class="row">
                 <div class="col-md-8">
-                    <h4 class="list-group-item-heading">{{ unitInfo.title }}</h4>
-                    <p class="list-group-item-text">{{ unitInfo.description }}</p>
+                    <h4 class="list-group-item-heading">{{ developerInfo.title }}</h4>
+                    <p class="list-group-item-text">{{ developerInfo.description }}</p>
                 </div>
                 <div class="col-md-4">
                     <p>
-                        <b>Cost:</b> {{ unitInfo.cost }}
+                        <b>Cost:</b> {{ developerInfo.cost }}
                         <br>
-                        <b>Commits/s:</b> {{ unitInfo.commitsPerSecond }}
+                        <b>Commits/s:</b> {{ developerInfo.commitsPerSecond }}
                     </p>
                 </div>
             </div>
         </div>
        `,
 
-    props: ["unitInfo"],
+    props: ["developerInfo"],
 
     computed: {
-        ...mapGetters(["canBuyUnit"]),
+        ...mapGetters(["canHireDeveloper"]),
 
-        canBuy() {
-            return this.canBuyUnit(this.unitInfo.id);
+        canHire() {
+            return this.canHireDeveloper(this.developerInfo.id);
         }
     },
 
     methods: {
-        ...mapMutations(["buyUnit"]),
+        ...mapMutations(["hireDeveloper"]),
 
         onClick() {
-            if (!this.canBuyUnit(this.unitInfo.id)) {
+            if (!this.canHireDeveloper(this.developerInfo.id)) {
                 return;
             }
 
-            this.buyUnit(this.unitInfo.id);
+            this.hireDeveloper(this.developerInfo.id);
         }
     }
 };
@@ -62,7 +62,7 @@ const template = `
                 <h3 class="panel-title">Human Resources</h3>
             </div>
             <div class="list-group">
-                <unit-item v-for="unit in unitTypesSorted" v-if="unit.unlocked" :key="unit.id" v-bind:unit-info="unit" />
+                <developer-item v-for="developer in developerTypesSorted" v-if="developer.unlocked" :key="developer.id" v-bind:developer-info="developer" />
             </div>
         </div>
     </div>
@@ -74,17 +74,17 @@ export default {
     template,
 
     components: {
-        unitItem
+        developerItem
     },
 
     computed: {
         ...mapState({
-            unitTypes: state => state.game.unitTypes
+            developerTypes: state => state.game.developerTypes
         }),
 
-        unitTypesSorted() {
-            return Object.keys(this.unitTypes)
-                .map(key => ({ id: key, ...this.unitTypes[key]}))
+        developerTypesSorted() {
+            return Object.keys(this.developerTypes)
+                .map(key => ({ id: key, ...this.developerTypes[key]}))
                 .sort((a, b) => a.rank - b.rank);
         }
     }

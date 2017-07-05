@@ -1,10 +1,10 @@
 import _ from "lodash";
 
-export const constantFactors = {
-    unitCostIncrease: 1.1337
+const constantFactors = {
+    developerCostIncrease: 1.1337
 };
 
-export const unitTypeDefaults = {
+const developerTypeDefaults = {
     intern: {
         rank: 1,
         title: "Intern",
@@ -24,30 +24,34 @@ export const unitTypeDefaults = {
         count: 0,
         unlocked: false
     }
-
 };
+
+function commitsPerSecondByDeveloper(state, id) {
+    const { count, commitsPerSecond } = state.developerTypes[id];
+    return count * commitsPerSecond;
+}
 
 export const gameModule = {
     state: {
         totalCommits: 0,
-        unitTypes: _.cloneDeep(unitTypeDefaults)
+        developerTypes: _.cloneDeep(developerTypeDefaults)
     },
 
     getters: {
-        canBuyUnit(state, getters) {
-            return (unitId) =>
-                state.totalCommits >= state.unitTypes[unitId].cost;
+        canHireDeveloper(state, getters) {
+            return (developerId) =>
+                state.totalCommits >= state.developerTypes[developerId].cost;
         },
 
         totalCommitsPerSecond(state, getters) {
-            return _.reduce(state.unitTypes,
-                (result, unitType) => result + unitType.count * unitType.commitsPerSecond,
+            return _.reduce(state.developerTypes,
+                (result, developerType, id) => result + commitsPerSecondByDeveloper(state, id),
                 0);
         },
 
-        totalUnits(state, getters) {
-            return _.reduce(state.unitTypes,
-                (result, unitType) => result + unitType.count,
+        totalDevelopers(state, getters) {
+            return _.reduce(state.developerTypes,
+                (result, developerType) => result + developerType.count,
                 0);
         }
     },
@@ -56,19 +60,19 @@ export const gameModule = {
         addCommits(state, amount) {
             state.totalCommits += Math.round(amount);
 
-            _.forOwn(state.unitTypes, (unitType, id) => {
-                if (state.totalCommits >= unitType.cost && !unitType.unlocked) {
-                    state.unitTypes[id].unlocked = true;
+            _.forOwn(state.developerTypes, (developerType, id) => {
+                if (state.totalCommits >= developerType.cost && !developerType.unlocked) {
+                    state.developerTypes[id].unlocked = true;
                 }
             });
         },
 
-        buyUnit(state, unitId) {
-            state.totalCommits -= state.unitTypes[unitId].cost;
+        hireDeveloper(state, developerId) {
+            state.totalCommits -= state.developerTypes[developerId].cost;
 
-            const newCost = Math.round(state.unitTypes[unitId].cost * constantFactors.unitCostIncrease);
-            state.unitTypes[unitId].cost = newCost;
-            state.unitTypes[unitId].count++;
+            const newCost = Math.round(state.developerTypes[developerId].cost * constantFactors.developerCostIncrease);
+            state.developerTypes[developerId].cost = newCost;
+            state.developerTypes[developerId].count++;
         }
     },
 

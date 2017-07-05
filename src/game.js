@@ -8,7 +8,7 @@ export const unitTypeDefaults = {
         title: "Intern",
         description: "Wrote a Hello World in Python recently.",
         cost: 10,
-        commitsPerSecond: 0.5,
+        commitsPerSecond: 1,
         count: 0,
         unlocked: true
     },
@@ -18,7 +18,7 @@ export const unitTypeDefaults = {
         title: "Junior Software Engineer",
         description: "Still unsullied by enterprise Java.",
         cost: 150,
-        commitsPerSecond: 10,
+        commitsPerSecond: 3,
         count: 0,
         unlocked: false
     }

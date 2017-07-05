@@ -10,5 +10,8 @@ new Vue({
 
 setInterval(() => {
     let commits = store.getters.totalCommitsPerSecond;
-    store.dispatch("addProducedCommits", commits);
+
+    if (commits > 0) {
+        store.dispatch("addProducedCommits", commits);
+    }
 }, 1000);

@@ -1,7 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./app";
+import store from "./store";
 
 new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+    el: "#app",
+    store,
+    render: h => h(App)
+});
+
+setInterval(() => {
+    let commits = store.getters.totalCommitsPerSecond;
+    store.dispatch("addProducedCommits", commits);
+}, 1000);

@@ -2,7 +2,8 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 const unitItem = {
     template: `
-        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canBuy }" v-on:click="onClick">
+        <div class="list-group-item" v-bind:class="{ 'list-group-item-success': canBuy }"
+            v-bind:style="{ cursor: canBuy ? 'pointer' : '' }" v-on:click="onClick">
             <div class="row">
                 <div class="col-md-8">
                     <h4 class="list-group-item-heading">{{ unitInfo.title }}</h4>

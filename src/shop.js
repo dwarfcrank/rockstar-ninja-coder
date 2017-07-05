@@ -61,7 +61,7 @@ const template = `
                 <h3 class="panel-title">Human Resources</h3>
             </div>
             <div class="list-group">
-                <unit-item v-for="unit in unitTypesSorted" :key="unit.id" v-bind:unit-info="unit" />
+                <unit-item v-for="unit in unitTypesSorted" v-if="unit.unlocked" :key="unit.id" v-bind:unit-info="unit" />
             </div>
         </div>
     </div>

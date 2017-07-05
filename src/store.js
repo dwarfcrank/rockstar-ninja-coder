@@ -30,6 +30,12 @@ const store = new Vuex.Store({
     mutations: {
         addCommits(state, amount) {
             state.totalCommits += Math.round(amount);
+
+            _.forOwn(state.unitTypes, (unitType, id) => {
+                if (state.totalCommits >= unitType.cost && !unitType.unlocked) {
+                    state.unitTypes[id].unlocked = true;
+                }
+            });
         },
 
         buyUnit(state, unitId) {

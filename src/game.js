@@ -1,178 +1,60 @@
 import _ from "lodash";
+import { upgrades } from "./upgrades";
+import { developerTypes } from "./developers";
+import constants from "./constants";
 
-const constantFactors = {
-    developerCostIncrease: 1.1337
-};
+export function getUnmetRequirements(developers, upgradeId) {
+    const {
+        requirements
+    } = upgrades[upgradeId];
 
-const upgradeDefaults = {
-    vim: {
-        title: "vim",
-        description: "Modal editing improves interns' productivity by 2%.",
-        cost: 50,
-        multipliers: {
-            intern: 1.02
-        },
-        requirements: {
-            intern: 10
-        },
-        unlocked: false
-    },
+    return _.reduce(requirements, (result, numRequired, requiredDev) => {
+        const numDevs = developers[requiredDev].count;
 
-    jetbrains: {
-        title: "JetBrains Subscription",
-        description: "IDEA is awesome. Junior SW Engineers' productivity up 4%",
-        cost: 500,
-        multipliers: {
-            juniorSwEng: 1.04
-        },
-        requirements: {
-            juniorSwEng: 10
-        },
-        unlocked: false
-    },
-
-    thinkpads: {
-        title: "ThinkPads",
-        description: "Physical function keys improve debugging experience. Total productivity up 5%.",
-        cost: 1000,
-        multipliers: {
-            all: 0.05
-        },
-        requirements: {
-            intern: 20,
-            juniorSwEng: 20
-        },
-        unlocked: false
-    },
-};
-
-const developerTypeDefaults = {
-    intern: {
-        rank: 1,
-        title: "Intern",
-        description: "Wrote a Hello World in Python recently.",
-        cost: 10,
-        commitsPerSecond: 1,
-        count: 0,
-        unlocked: true
-    },
-
-    juniorSwEng: {
-        rank: 2,
-        title: "Junior Software Engineer",
-        description: "Still unsullied by enterprise Java.",
-        cost: 150,
-        commitsPerSecond: 3,
-        count: 0,
-        unlocked: false
-    }
-};
-
-function developerCommitMultiplier(state, developerId) {
-    return _.reduce(state.upgrades, (result, upgrade) => {
-        if (upgrade.unlocked && upgrade.multipliers[developerId]) {
-            return result * upgrade.multipliers[developerId];
+        if (numDevs < numRequired) {
+            result[requiredDev] = numRequired - numDevs;
         }
 
         return result;
-    }, 1);
+    }, {});
 }
 
-function commitsPerSecondByDeveloper(state, id) {
-    const { count, commitsPerSecond } = state.developerTypes[id];
-    return count * commitsPerSecond * developerCommitMultiplier(state, id);
-}
-
-function checkUpgradeRequirements(state, id) {
-    const { requirements } = state.upgrades[id];
-
-    let ok = true;
-
-    _.forOwn(requirements, (reqCount, reqId) => {
-        ok = ok && state.developerTypes[reqId].count >= reqCount;
+export function getAvailableUpgrades(state) {
+    return Object.keys(upgrades).filter(upgradeId => {
+        const requirements = getUnmetRequirements(state.developers, upgradeId);
+        return _.isEmpty(requirements);
     });
-
-    return ok;
 }
 
-function totalCommitMultiplier(state) {
-    return _.reduce(state.upgrades, (result, upgrade) => {
-        if (upgrade.unlocked && upgrade.multipliers.all) {
-            return result + upgrade.multipliers.all;
-        }
-
-        return result;
-    }, 1);
+export function getAvailableDevelopers(state) {
+    return Object.keys(developerTypes)
+        .filter(devId => state.totalCommits >= state.developers[devId].cost);
 }
 
-export const gameModule = {
-    state: {
-        totalCommits: 0,
-        developerTypes: _.cloneDeep(developerTypeDefaults),
-        upgrades: _.cloneDeep(upgradeDefaults)
-    },
+function getDeveloperCommitRateMultiplier(state, devId) {
+    return _.reduce(state.upgrades,
+        (result, upgrade, upgradeId) => {
+            if (upgrade.status !== constants.upgradeStatus.unlocked
+                || !upgrades[upgradeId].modifiers[devId]) {
+                return result;
+            }
 
-    getters: {
-        canHireDeveloper(state, getters) {
-            return (developerId) =>
-                state.totalCommits >= state.developerTypes[developerId].cost;
-        },
+            return result * (upgrades[upgradeId].modifiers[devId].multiplier + 1);
+        }, 1);
+}
 
-        isUpgradeAvailable: (state, getters) => id =>
-            checkUpgradeRequirements(state, id) && !state.upgrades[id].unlocked,
+export function getDeveloperCommitRate(state, devId) {
+    const baseRate = developerTypes[devId].baseCommitRate;
+    const multiplier = getDeveloperCommitRateMultiplier(state, devId);
 
-        canBuyUpgrade: (state, getters) => id => {
-            return getters.isUpgradeAvailable(id)
-                && state.totalCommits >= state.upgrades[id].cost;
-        },
+    return baseRate * multiplier;
+}
 
-        developerCommitMultiplier: (state, getters) => id => developerCommitMultiplier(state, id),
+export function getCommitRate(state) {
+    const commitRate = _.reduce(state.developers,
+        (result, dev, devId) => result + getDeveloperCommitRate(state, devId) * dev.count, 0);
 
-        totalCommitsPerSecond(state, getters) {
-            return _.reduce(state.developerTypes,
-                (result, developerType, id) => result + commitsPerSecondByDeveloper(state, id),
-                0);
-        },
+    const multiplier = 1;
 
-        totalDevelopers(state, getters) {
-            return _.reduce(state.developerTypes,
-                (result, developerType) => result + developerType.count,
-                0);
-        }
-    },
-
-    mutations: {
-        addCommits(state, amount) {
-            state.totalCommits += Math.round(amount);
-
-            _.forOwn(state.developerTypes, (developerType, id) => {
-                if (state.totalCommits >= developerType.cost && !developerType.unlocked) {
-                    state.developerTypes[id].unlocked = true;
-                }
-            });
-        },
-
-        hireDeveloper(state, developerId) {
-            state.totalCommits -= state.developerTypes[developerId].cost;
-
-            const newCost = Math.round(state.developerTypes[developerId].cost * constantFactors.developerCostIncrease);
-            state.developerTypes[developerId].cost = newCost;
-            state.developerTypes[developerId].count++;
-        },
-
-        buyUpgrade(state, id) {
-            state.totalCommits -= state.upgrades[id].cost;
-            state.upgrades[id].unlocked = true;
-        }
-    },
-
-    actions: {
-        addProducedCommits({
-            state,
-            commit,
-            getters
-        }) {
-            commit("addCommits", getters.totalCommitsPerSecond);
-        }
-    }
-};
+    return commitRate * multiplier;
+}

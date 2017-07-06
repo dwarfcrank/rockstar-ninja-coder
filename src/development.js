@@ -28,7 +28,7 @@ export default {
 
     computed: {
         ...mapState({
-            totalCommits: state => state.game.totalCommits
+            totalCommits: state => state.totalCommits
         })
     }
 };

@@ -9,9 +9,5 @@ new Vue({
 });
 
 setInterval(() => {
-    let commits = store.getters.totalCommitsPerSecond;
-
-    if (commits > 0) {
-        store.dispatch("addProducedCommits", commits);
-    }
+    store.commit("tick");
 }, 1000);

@@ -9,11 +9,11 @@ const template = `
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-8">Commits per second</div>
-                <div class="col-md-4">{{ totalCommitsPerSecond }}</div>
+                <div class="col-md-4">{{ commitRate }}</div>
             </div>
             <div class="row">
                 <div class="col-md-8">Developers</div>
-                <div class="col-md-4">{{ totalDevelopers }}</div>
+                <div class="col-md-4">{{ developerCount }}</div>
             </div>
         </div>
     </div>
@@ -25,6 +25,6 @@ export default {
     template,
 
     computed: {
-        ...mapGetters(["totalCommitsPerSecond", "totalDevelopers"])
+        ...mapGetters(["commitRate", "developerCount"])
     }
 };

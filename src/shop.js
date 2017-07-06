@@ -1,4 +1,7 @@
 import { mapState, mapGetters, mapMutations } from "vuex";
+import { developerTypes } from "./developers";
+import { upgrades } from "./upgrades";
+import constants from "./constants";
 
 const developerItem = {
     template: `
@@ -13,7 +16,7 @@ const developerItem = {
                     <p>
                         <b>Cost:</b> {{ developerInfo.cost }}
                         <br>
-                        <b>Commits/s:</b> {{ commitsPerSecond }}
+                        <b>Commits/s:</b> {{ commitRateByDeveloper(developerInfo.id) }}
                     </p>
                 </div>
             </div>
@@ -23,7 +26,7 @@ const developerItem = {
     props: ["developerInfo"],
 
     computed: {
-        ...mapGetters(["canHireDeveloper", "developerCommitMultiplier"]),
+        ...mapGetters(["canHireDeveloper", "commitRateByDeveloper"]),
 
         canHire() {
             return this.canHireDeveloper(this.developerInfo.id);
@@ -96,7 +99,7 @@ const template = `
                 <h3 class="panel-title">Upgrades</h3>
             </div>
             <div class="list-group">
-                <upgrade-item v-for="upgrade in upgradesSorted" v-if="isUpgradeAvailable(upgrade.id)" :key="upgrade.id" v-bind:upgrade-info="upgrade" />
+                <upgrade-item v-for="upgrade in upgradesSorted" v-if="upgrade.available" :key="upgrade.id" v-bind:upgrade-info="upgrade" />
             </div>
         </div>
     </div>
@@ -107,7 +110,7 @@ const template = `
                 <h3 class="panel-title">Human Resources</h3>
             </div>
             <div class="list-group">
-                <developer-item v-for="developer in developerTypesSorted" v-if="developer.unlocked" :key="developer.id" v-bind:developer-info="developer" />
+                <developer-item v-for="developer in developerTypesSorted" v-if="developer.available" :key="developer.id" v-bind:developer-info="developer" />
             </div>
         </div>
     </div>
@@ -124,23 +127,23 @@ export default {
     },
 
     computed: {
-        ...mapState({
-            developerTypes: state => state.game.developerTypes,
-            upgrades: state => state.game.upgrades
-        }),
-
-        ...mapGetters(["isUpgradeAvailable"]),
+        ...mapState(["developers", "upgrades"]),
 
         developerTypesSorted() {
-            return Object.keys(this.developerTypes)
-                .map(key => ({ id: key, ...this.developerTypes[key]}))
-                .sort((a, b) => a.rank - b.rank);
+            return Object.keys(this.developers)
+                .map(key => ({ id: key, ...developerTypes[key], ...this.developers[key]}))
+                .sort((a, b) => developerTypes[a.id].rank - developerTypes[b.id].rank);
         },
 
         upgradesSorted() {
             return Object.keys(this.upgrades)
-                .map(key => ({ id: key, ...this.upgrades[key] }))
-                .sort((a, b) => a.cost - b.cost);
+                .map(id => ({
+                    id,
+                    ...upgrades[id],
+                    ...this.upgrades[id],
+                    available: this.upgrades[id].status === constants.upgradeStatus.available
+                }))
+                .sort((a, b) => upgrades[a.id].cost - upgrades[b.id].cost);
         }
     }
 };

@@ -1,14 +1,14 @@
 import _ from "lodash";
 import Vue from "vue";
 import Vuex from "vuex";
-import { getInitialDeveloperState } from "./developers";
+import { getInitialDeveloperState, DeveloperState } from "./developers";
 import { getInitialUpgradeState, upgrades } from "./upgrades";
-import { getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate } from "./game";
+import { GameState, getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate } from "./game";
 import { developerCostGrowth, UpgradeStatus } from "./constants";
 
 Vue.use(Vuex);
 
-function updateAvailability(state) {
+function updateAvailability(state: GameState) {
     getAvailableUpgrades(state)
         .forEach(upgradeId => {
             if (state.upgrades[upgradeId].status !== UpgradeStatus.Unlocked) {
@@ -28,43 +28,43 @@ const store = new Vuex.Store({
     },
 
     getters: {
-        canHireDeveloper: (state, getters) => id => {
+        canHireDeveloper: (state: GameState, getters) => (id: string): boolean => {
             return state.totalCommits >= state.developers[id].cost;
         },
 
-        canBuyUpgrade: (state, getters) => id => {
+        canBuyUpgrade: (state: GameState, getters) => (id: string): boolean => {
             return state.totalCommits >= upgrades[id].cost;
         },
 
-        commitRateByDeveloper: (state, getters) => id => {
+        commitRateByDeveloper: (state: GameState, getters) => (id: string): number => {
             return getDeveloperCommitRate(state, id);
         },
 
-        developerCount(state) {
-            return _.reduce(state.developers, (result, dev) => result + dev.count, 0);
+        developerCount(state: GameState): number {
+            return _.reduce(state.developers, (result: number, dev: DeveloperState) => result + dev.count, 0);
         },
 
-        commitRate: (state) => getCommitRate(state)
+        commitRate: (state: GameState): number => getCommitRate(state)
     },
 
     mutations: {
-        tick(state) {
+        tick(state: GameState) {
             state.totalCommits += getCommitRate(state);
             updateAvailability(state);
         },
 
-        addCommits(state, amount) {
+        addCommits(state: GameState, amount: number) {
             state.totalCommits += amount;
             updateAvailability(state);
         },
 
-        hireDeveloper(state, devId) {
+        hireDeveloper(state: GameState, devId: string) {
             state.totalCommits -= state.developers[devId].cost;
             state.developers[devId].cost *= developerCostGrowth;
             state.developers[devId].count++;
         },
 
-        buyUpgrade(state, upgradeId) {
+        buyUpgrade(state: GameState, upgradeId: string) {
             state.totalCommits -= upgrades[upgradeId].cost;
             state.upgrades[upgradeId].status = UpgradeStatus.Unlocked;
         }

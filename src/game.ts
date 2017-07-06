@@ -1,15 +1,21 @@
 import _ from "lodash";
-import { upgrades, UpgradeState } from "./upgrades";
+import { upgrades, UpgradeState, UpgradeRequirements } from "./upgrades";
 import { developerTypes, DeveloperState } from "./developers";
 import { UpgradeStatus } from "./constants";
 
-export function getUnmetRequirements(developers: DeveloperState[], upgradeId: string): { [devId: string]: number } {
+export interface GameState {
+    totalCommits: number;
+    developers: { [devId: string]: DeveloperState };
+    upgrades: { [upgradeId: string]: UpgradeState };
+}
+
+export function getUnmetRequirements(developers: { [devId: string]: DeveloperState }, upgradeId: string): UpgradeRequirements {
     const {
         requirements
     } = upgrades[upgradeId];
 
-    return _.reduce(requirements, (result, numRequired, requiredDev) => {
-        const numDevs = developers[requiredDev].count;
+    return _.reduce(requirements, (result: UpgradeRequirements, numRequired: number, requiredDev: string) => {
+        const numDevs = developers[numRequired].count;
 
         if (numDevs < numRequired) {
             result[requiredDev] = numRequired - numDevs;
@@ -19,21 +25,21 @@ export function getUnmetRequirements(developers: DeveloperState[], upgradeId: st
     }, {});
 }
 
-export function getAvailableUpgrades(state): string[] {
+export function getAvailableUpgrades(state: GameState): string[] {
     return Object.keys(upgrades).filter(upgradeId => {
         const requirements = getUnmetRequirements(state.developers, upgradeId);
         return _.isEmpty(requirements);
     });
 }
 
-export function getAvailableDevelopers(state): string[] {
+export function getAvailableDevelopers(state: GameState): string[] {
     return Object.keys(developerTypes)
         .filter(devId => state.totalCommits >= state.developers[devId].cost);
 }
 
-function getDeveloperCommitRateMultiplier(state, devId: string): number {
+function getDeveloperCommitRateMultiplier(state: GameState, devId: string): number {
     return _.reduce(state.upgrades,
-        (result, upgrade, upgradeId) => {
+        (result: number, upgrade: UpgradeState, upgradeId: string) => {
             if (upgrade.status !== UpgradeStatus.Unlocked
                 || !upgrades[upgradeId].modifiers[devId]) {
                 return result;
@@ -43,16 +49,18 @@ function getDeveloperCommitRateMultiplier(state, devId: string): number {
         }, 1);
 }
 
-export function getDeveloperCommitRate(state, devId: string): number {
+export function getDeveloperCommitRate(state: GameState, devId: string): number {
     const baseRate = developerTypes[devId].baseCommitRate;
     const multiplier = getDeveloperCommitRateMultiplier(state, devId);
 
     return baseRate * multiplier;
 }
 
-export function getCommitRate(state): number {
+export function getCommitRate(state: GameState): number {
     const commitRate = _.reduce(state.developers,
-        (result, dev, devId) => result + getDeveloperCommitRate(state, devId) * dev.count, 0);
+        (result: number, dev: DeveloperState, devId: string) =>
+            result + getDeveloperCommitRate(state, devId) * dev.count,
+        0);
 
     const multiplier = 1;
 

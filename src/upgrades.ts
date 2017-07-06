@@ -6,12 +6,16 @@ export interface UpgradeModifier {
     additiveMultiplier?: number;
 }
 
+export interface UpgradeRequirements {
+    [devId: string]: number;
+}
+
 export interface Upgrade {
     title: string;
     description: string;
     cost: number;
     modifiers: { [devId: string]: UpgradeModifier };
-    requirements: { [devId: string]: number };
+    requirements: UpgradeRequirements;
 }
 
 export interface UpgradeState {

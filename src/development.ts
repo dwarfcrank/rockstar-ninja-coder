@@ -23,7 +23,7 @@ import Component from "vue-class-component";
 })
 export default class DevelopmentPane extends Vue {
     get totalCommits() {
-        return this.$store.state.totalCommits;
+        return Math.round(this.$store.state.totalCommits);
     }
 
     onClick() {

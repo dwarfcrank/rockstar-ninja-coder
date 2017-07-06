@@ -24,7 +24,7 @@ import Component from "vue-class-component";
 })
 export default class TeamPane extends Vue {
     get commitRate() {
-        return this.$store.getters.commitRate;
+        return this.$store.getters.commitRate.toFixed(2);
     }
 
     get developerCount() {

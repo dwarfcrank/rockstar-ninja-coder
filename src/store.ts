@@ -62,7 +62,7 @@ const store = new Vuex.Store({
 
         hireDeveloper(state: GameState, devId: string) {
             state.totalCommits -= state.developers[devId].cost;
-            state.developers[devId].cost *= developerCostGrowth;
+            state.developers[devId].cost = Math.round(state.developers[devId].cost * developerCostGrowth);
             state.developers[devId].count++;
         },
 

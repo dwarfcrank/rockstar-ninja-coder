@@ -4,6 +4,7 @@ import { UpgradeStatus } from "./constants";
 export interface UpgradeModifier {
     multiplier?: number;
     additiveMultiplier?: number;
+    constantAddition?: number;
 }
 
 export interface UpgradeRequirements {
@@ -64,6 +65,18 @@ export const upgrades: { [upgradeId: string]: Upgrade } = {
             intern: 20,
             juniorSwEng: 20
         }
+    },
+
+    extraTerminal: {
+        title: "Extra Terminal Window",
+        description: "Two windows, two shells, two commits! +1 commit per click.",
+        cost: 100,
+        modifiers: {
+            player: {
+                constantAddition: 1
+            }
+        },
+        requirements: {}
     }
 };
 

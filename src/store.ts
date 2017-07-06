@@ -3,7 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { getInitialDeveloperState, DeveloperState } from "./developers";
 import { getInitialUpgradeState, upgrades } from "./upgrades";
-import { GameState, getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate } from "./game";
+import { GameState, getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate, getCommitsPerClick } from "./game";
 import { developerCostGrowth, UpgradeStatus } from "./constants";
 
 Vue.use(Vuex);
@@ -44,7 +44,9 @@ const store = new Vuex.Store({
             return _.reduce(state.developers, (result: number, dev: DeveloperState) => result + dev.count, 0);
         },
 
-        commitRate: (state: GameState): number => getCommitRate(state)
+        commitRate: (state: GameState): number => getCommitRate(state),
+
+        commitsPerClick: (state: GameState): number => getCommitsPerClick(state)
     },
 
     mutations: {

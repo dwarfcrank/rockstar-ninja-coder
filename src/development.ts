@@ -13,7 +13,7 @@ import Component from "vue-class-component";
                     <div class="panel-body">
                         <p class="text-center">{{ totalCommits }} commits</p>
                         <p class="text-center">
-                            <button v-on:click="addCommits(1)" type="button" class="btn btn-primary btn-lg">$ git commit -m "yolo"</button>
+                            <button v-on:click="onClick" type="button" class="btn btn-primary btn-lg">$ git commit -m "yolo"</button>
                         </p>
                     </div>
                 </div>
@@ -26,7 +26,7 @@ export default class DevelopmentPane extends Vue {
         return this.$store.state.totalCommits;
     }
 
-    addCommits(n: number) {
-        this.$store.commit("addCommits", n);
+    onClick() {
+        this.$store.commit("addCommits", this.$store.getters.commitsPerClick);
     }
 }

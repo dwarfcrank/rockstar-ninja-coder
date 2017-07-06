@@ -165,7 +165,7 @@ export const upgrades: { [upgradeId: string]: Upgrade } = {
         description: "Rusty crates filled with stuff. Rustaceans' productivity up 7%.",
         cost: 15000,
         modifiers: {
-            rustacen: {
+            rustacean: {
                 multiplier: 0.07
             }
         },

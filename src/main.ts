@@ -8,6 +8,9 @@ new Vue({
     render: h => h(App)
 });
 
+const tickInterval = 100;
+
 setInterval(() => {
-    store.commit("tick");
-}, 1000);
+    const commitsPerTick = store.getters.commitRate * (tickInterval / 1000);
+    store.commit("addCommits", commitsPerTick);
+}, tickInterval);

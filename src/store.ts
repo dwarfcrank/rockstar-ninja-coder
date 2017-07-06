@@ -50,11 +50,6 @@ const store = new Vuex.Store({
     },
 
     mutations: {
-        tick(state: GameState) {
-            state.totalCommits += getCommitRate(state);
-            updateAvailability(state);
-        },
-
         addCommits(state: GameState, amount: number) {
             state.totalCommits += amount;
             updateAvailability(state);

@@ -53,7 +53,7 @@ class DeveloperItem extends Vue {
     }
 
     get commitsPerSecond() {
-        return this.developerModel.baseCommitRate * this.$store.getters.commitRateByDeveloper(this.developerModel.id);
+        return this.$store.getters.commitRateByDeveloper(this.developerModel.id);
     }
 
     onClick() {

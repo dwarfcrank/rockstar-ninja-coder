@@ -15,7 +15,7 @@ export function getUnmetRequirements(developers: { [devId: string]: DeveloperSta
     } = upgrades[upgradeId];
 
     return _.reduce(requirements, (result: UpgradeRequirements, numRequired: number, requiredDev: string) => {
-        const numDevs = developers[numRequired].count;
+        const numDevs = developers[requiredDev].count;
 
         if (numDevs < numRequired) {
             result[requiredDev] = numRequired - numDevs;
@@ -62,7 +62,17 @@ export function getCommitRate(state: GameState): number {
             result + getDeveloperCommitRate(state, devId) * dev.count,
         0);
 
-    const multiplier = 1;
+    const multiplier = _.reduce(state.upgrades,
+        (result: number, upgrade: UpgradeState, upgradeId: string) => {
+            const modifier = upgrades[upgradeId].modifiers["all"];
+
+            if (upgrade.status !== UpgradeStatus.Unlocked || !modifier) {
+                return result;
+            }
+
+            return result + modifier.additiveMultiplier;
+        },
+        1);
 
     return commitRate * multiplier;
 }

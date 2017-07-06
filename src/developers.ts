@@ -1,5 +1,19 @@
+export interface DeveloperType {
+    rank: number;
+    title: string;
+    description: string;
+    initialCost: number;
+    baseCommitRate: number;
+}
 
-export const developerTypes = {
+export interface DeveloperState {
+    count: number;
+    available: boolean;
+    cost: number;
+    commitRate: number;
+}
+
+export const developerTypes: { [devId: string]: DeveloperType } = {
     intern: {
         rank: 1,
         title: "Intern",
@@ -18,7 +32,7 @@ export const developerTypes = {
 };
 
 // Helper to keep the initial state object in sync with developerTypes.
-export function getInitialDeveloperState() {
+export function getInitialDeveloperState(): { [devId: string]: DeveloperState } {
     let result = {};
 
     for (let devId in developerTypes) {

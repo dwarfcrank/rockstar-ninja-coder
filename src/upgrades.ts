@@ -1,7 +1,24 @@
 import _ from "lodash";
-import constants from "./constants";
+import { UpgradeStatus } from "./constants";
 
-export const upgrades = {
+export interface UpgradeModifier {
+    multiplier?: number;
+    additiveMultiplier?: number;
+}
+
+export interface Upgrade {
+    title: string;
+    description: string;
+    cost: number;
+    modifiers: { [devId: string]: UpgradeModifier };
+    requirements: { [devId: string]: number };
+}
+
+export interface UpgradeState {
+    status: UpgradeStatus
+}
+
+export const upgrades: { [upgradeId: string]: Upgrade } = {
     vim: {
         title: "vim",
         description: "Modal editing improves interns' productivity by 2%.",
@@ -20,7 +37,7 @@ export const upgrades = {
         title: "JetBrains Subscription",
         description: "IDEA is awesome. Junior SW Engineers' productivity up 4%",
         cost: 500,
-        multipliers: {
+        modifiers: {
             juniorSwEng: {
                 multiplier: 0.04
             }
@@ -34,7 +51,7 @@ export const upgrades = {
         title: "ThinkPads",
         description: "Physical function keys improve debugging experience. Total productivity up 5%.",
         cost: 1000,
-        modifier: {
+        modifiers: {
             all: {
                 additiveMultiplier: 0.05
             }
@@ -46,12 +63,12 @@ export const upgrades = {
     }
 };
 
-export function getInitialUpgradeState() {
+export function getInitialUpgradeState(): { [upgradeId: string]: UpgradeState } {
     let result = {};
 
     for (let upgradeId in upgrades) {
         result[upgradeId] = {
-            status: constants.upgradeStatus.locked
+            status: UpgradeStatus.Locked
         };
     }
 

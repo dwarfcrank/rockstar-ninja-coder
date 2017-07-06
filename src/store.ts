@@ -4,15 +4,15 @@ import Vuex from "vuex";
 import { getInitialDeveloperState } from "./developers";
 import { getInitialUpgradeState, upgrades } from "./upgrades";
 import { getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate } from "./game";
-import constants from "./constants";
+import { developerCostGrowth, UpgradeStatus } from "./constants";
 
 Vue.use(Vuex);
 
 function updateAvailability(state) {
     getAvailableUpgrades(state)
         .forEach(upgradeId => {
-            if (state.upgrades[upgradeId].status !== constants.upgradeStatus.unlocked) {
-                state.upgrades[upgradeId].status = constants.upgradeStatus.available;
+            if (state.upgrades[upgradeId].status !== UpgradeStatus.Unlocked) {
+                state.upgrades[upgradeId].status = UpgradeStatus.Available;
             }
         });
 
@@ -60,13 +60,13 @@ const store = new Vuex.Store({
 
         hireDeveloper(state, devId) {
             state.totalCommits -= state.developers[devId].cost;
-            state.developers[devId].cost *= constants.developerCostGrowth;
+            state.developers[devId].cost *= developerCostGrowth;
             state.developers[devId].count++;
         },
 
         buyUpgrade(state, upgradeId) {
             state.totalCommits -= upgrades[upgradeId].cost;
-            state.upgrades[upgradeId].status = constants.upgradeStatus.unlocked;
+            state.upgrades[upgradeId].status = UpgradeStatus.Unlocked;
         }
     }
 });

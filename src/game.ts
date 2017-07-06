@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { upgrades } from "./upgrades";
 import { developerTypes } from "./developers";
-import constants from "./constants";
+import { UpgradeStatus } from "./constants";
 
 export function getUnmetRequirements(developers, upgradeId) {
     const {
@@ -34,7 +34,7 @@ export function getAvailableDevelopers(state) {
 function getDeveloperCommitRateMultiplier(state, devId) {
     return _.reduce(state.upgrades,
         (result, upgrade, upgradeId) => {
-            if (upgrade.status !== constants.upgradeStatus.unlocked
+            if (upgrade.status !== UpgradeStatus.Unlocked
                 || !upgrades[upgradeId].modifiers[devId]) {
                 return result;
             }

@@ -11,6 +11,10 @@ import { developerTypes } from "./developers";
                 </div>
                 <div class="panel-body">
                     <div class="row">
+                        <div class="col-md-8">Commits per click</div>
+                        <div class="col-md-4">{{ commitsPerClick }}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-8">Commits per second</div>
                         <div class="col-md-4">{{ commitRate }}</div>
                     </div>
@@ -18,6 +22,7 @@ import { developerTypes } from "./developers";
                         <div class="col-md-8">Commits (all time)</div>
                         <div class="col-md-4">{{ allTimeCommits }}</div>
                     </div>
+                    <p></p>
                     <div class="row">
                         <div class="col-md-8">Developers</div>
                         <div class="col-md-4">{{ developerCount }}</div>
@@ -37,6 +42,10 @@ import { developerTypes } from "./developers";
 export default class TeamPane extends Vue {
     get commitRate() {
         return this.$store.getters.commitRate.toFixed(2);
+    }
+
+    get commitsPerClick() {
+        return this.$store.getters.commitsPerClick.toFixed(2);
     }
 
     get developerCount() {

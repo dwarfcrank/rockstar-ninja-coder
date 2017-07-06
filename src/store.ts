@@ -23,6 +23,7 @@ function updateAvailability(state: GameState) {
 const store = new Vuex.Store({
     state: {
         totalCommits: 0,
+        allTimeCommits: 0,
         developers: getInitialDeveloperState(),
         upgrades: getInitialUpgradeState()
     },
@@ -52,6 +53,7 @@ const store = new Vuex.Store({
     mutations: {
         addCommits(state: GameState, amount: number) {
             state.totalCommits += amount;
+            state.allTimeCommits += amount;
             updateAvailability(state);
         },
 

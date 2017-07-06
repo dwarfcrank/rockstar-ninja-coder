@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
+import { developerTypes } from "./developers";
 
 @Component({
     template: `
@@ -14,8 +15,19 @@ import Component from "vue-class-component";
                         <div class="col-md-4">{{ commitRate }}</div>
                     </div>
                     <div class="row">
+                        <div class="col-md-8">Commits (all time)</div>
+                        <div class="col-md-4">{{ allTimeCommits }}</div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-8">Developers</div>
                         <div class="col-md-4">{{ developerCount }}</div>
+                    </div>
+                    <div class="row">
+                        <ul>
+                            <li v-for="(dev, id) in developers" v-if="dev.count > 0">
+                                <b>{{dev.count}}x</b> {{ developerTitle(id) }} ({{ developerCommitRate(id) }} commits/s)
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -29,5 +41,22 @@ export default class TeamPane extends Vue {
 
     get developerCount() {
         return this.$store.getters.developerCount;
+    }
+
+    get allTimeCommits() {
+        return this.$store.state.allTimeCommits.toFixed(2);
+    }
+
+    get developers() {
+        return this.$store.state.developers;
+    }
+
+    developerTitle(id) {
+        return developerTypes[id].title;
+    }
+
+    developerCommitRate(id) {
+        return (this.$store.getters.commitRateByDeveloper(id)
+                * this.$store.state.developers[id].count).toFixed(2);
     }
 }

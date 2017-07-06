@@ -5,6 +5,7 @@ import { UpgradeStatus } from "./constants";
 
 export interface GameState {
     totalCommits: number;
+    allTimeCommits: number;
     developers: { [devId: string]: DeveloperState };
     upgrades: { [upgradeId: string]: UpgradeState };
 }

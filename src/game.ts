@@ -89,7 +89,7 @@ export function getCommitsPerClick(state: GameState): number {
             }
 
             return {
-                constant: result.constant + modifier.constantAddition,
+                constant: result.constant + (modifier.constantAddition || 0),
                 multiplier: result.multiplier * (modifier.multiplier || 1)
             };
         },

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { upgrades, UpgradeState, UpgradeRequirements } from "./upgrades";
 import { developerTypes, DeveloperState } from "./developers";
-import { UpgradeStatus } from "./constants";
+import { UpgradeStatus, availabilityCostMultiplier } from "./constants";
 
 export interface GameState {
     totalCommits: number;
@@ -29,13 +29,14 @@ export function getUnmetRequirements(developers: { [devId: string]: DeveloperSta
 export function getAvailableUpgrades(state: GameState): string[] {
     return Object.keys(upgrades).filter(upgradeId => {
         const requirements = getUnmetRequirements(state.developers, upgradeId);
-        return _.isEmpty(requirements);
+        return _.isEmpty(requirements)
+            && state.totalCommits >= upgrades[upgradeId].cost * availabilityCostMultiplier;
     });
 }
 
 export function getAvailableDevelopers(state: GameState): string[] {
     return Object.keys(developerTypes)
-        .filter(devId => state.totalCommits >= state.developers[devId].cost);
+        .filter(devId => state.totalCommits >= state.developers[devId].cost * availabilityCostMultiplier);
 }
 
 function getDeveloperCommitRateMultiplier(state: GameState, devId: string): number {

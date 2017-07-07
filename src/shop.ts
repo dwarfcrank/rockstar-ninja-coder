@@ -2,8 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { mapState, mapGetters, mapMutations } from "vuex";
 import { developerTypes } from "./developers";
-import { upgrades } from "./upgrades";
-import { UpgradeStatus } from "./constants";
+import { upgrades, UpgradeStatus } from "./upgrades";
 
 interface DeveloperItemModel {
     id: string;

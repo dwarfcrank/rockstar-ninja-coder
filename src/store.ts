@@ -4,7 +4,8 @@ import Vuex from "vuex";
 import { getInitialDeveloperState, DeveloperState } from "./developers";
 import { getInitialUpgradeState, upgrades } from "./upgrades";
 import { GameState, getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate, getCommitsPerClick } from "./game";
-import { developerCostGrowth, UpgradeStatus } from "./constants";
+import { developerCostGrowth } from "./constants";
+import { UpgradeStatus } from "./upgrades";
 
 Vue.use(Vuex);
 

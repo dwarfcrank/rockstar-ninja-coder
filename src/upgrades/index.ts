@@ -24,7 +24,7 @@ export const upgrades: { [upgradeId: string]: Upgrade } = {
 };
 
 export function getInitialUpgradeState(): { [upgradeId: string]: UpgradeState } {
-    let result = {};
+    let result: { [upgradeId: string]: UpgradeState } = {};
 
     for (let upgradeId in upgrades) {
         result[upgradeId] = {

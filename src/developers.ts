@@ -73,7 +73,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
 
 // Helper to keep the initial state object in sync with developerTypes.
 export function getInitialDeveloperState(): { [devId: string]: DeveloperState } {
-    let result = {};
+    let result: { [devId: string]: DeveloperState } = {};
 
     for (let devId in developerTypes) {
         result[devId] = {

@@ -10,6 +10,8 @@
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "sourceMap": true,
-        "target": "ES5"
+        "target": "ES5",
+        "noImplicitAny": true,
+        "noImplicitReturns": true
     }
 }

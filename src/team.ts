@@ -60,11 +60,11 @@ export default class TeamPane extends Vue {
         return this.$store.state.developers;
     }
 
-    developerTitle(id) {
+    developerTitle(id: string) {
         return developerTypes[id].title;
     }
 
-    developerCommitRate(id) {
+    developerCommitRate(id: string) {
         return (this.$store.getters.commitRateByDeveloper(id)
                 * this.$store.state.developers[id].count).toFixed(2);
     }

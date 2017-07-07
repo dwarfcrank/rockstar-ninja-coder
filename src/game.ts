@@ -12,44 +12,52 @@ export interface GameState {
 }
 
 export function getUnmetRequirements(developers: { [devId: string]: DeveloperState }, upgradeId: string): UpgradeRequirements {
-    const {
-        requirements
-    } = upgrades[upgradeId];
+    const requirements = upgrades[upgradeId].requirements;
+    let unmet: UpgradeRequirements = {};
 
-    return _.reduce(requirements, (result: UpgradeRequirements, numRequired: number, requiredDev: string) => {
-        const numDevs = developers[requiredDev].count;
-
-        if (numDevs < numRequired) {
-            result[requiredDev] = numRequired - numDevs;
+    for (let [devId, numRequired] of Object.entries(requirements)) {
+        if (developers[devId].count < numRequired) {
+            unmet[devId] = numRequired - developers[devId].count;
         }
+    }
 
-        return result;
-    }, {});
+    return unmet;
 }
 
 export function getAvailableUpgrades(state: GameState): string[] {
-    return Object.keys(upgrades).filter(upgradeId => {
-        const requirements = getUnmetRequirements(state.developers, upgradeId);
-        return _.isEmpty(requirements)
-            && state.totalCommits >= upgrades[upgradeId].cost * availabilityCostMultiplier;
-    });
+    let available: string[] = [];
+
+    for (let [id, upgrade] of Object.entries(upgrades)) {
+        const unmet = getUnmetRequirements(state.developers, id);
+        const isAvailable = state.totalCommits >= upgrade.cost * availabilityCostMultiplier;
+
+        if (_.isEmpty(unmet) && isAvailable) {
+            available.push(id);
+        }
+    }
+
+    return available;
 }
 
 export function getAvailableDevelopers(state: GameState): string[] {
-    return Object.keys(developerTypes)
-        .filter(devId => state.totalCommits >= state.developers[devId].cost * availabilityCostMultiplier);
+    const isAvailable = (devId: string) =>
+        state.totalCommits >= state.developers[devId].cost * availabilityCostMultiplier;
+
+    return Object.keys(developerTypes).filter(isAvailable);
 }
 
 function getDeveloperCommitRateMultiplier(state: GameState, devId: string): number {
-    return _.reduce(state.upgrades,
-        (result: number, upgrade: UpgradeState, upgradeId: string) => {
-            if (upgrade.status !== UpgradeStatus.Unlocked
-                || !upgrades[upgradeId].modifiers[devId]) {
-                return result;
-            }
+    let multiplier = 1;
 
-            return result * (upgrades[upgradeId].modifiers[devId].multiplier + 1);
-        }, 1);
+    for (let [id, upgrade] of Object.entries(upgrades)) {
+        if (!upgrade.modifiers[devId] || state.upgrades[id].status !== UpgradeStatus.Unlocked) {
+            continue;
+        }
+
+        multiplier *= (upgrade.modifiers[devId].multiplier + 1);
+    }
+
+    return multiplier;
 }
 
 export function getDeveloperCommitRate(state: GameState, devId: string): number {

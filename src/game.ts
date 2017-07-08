@@ -15,7 +15,7 @@ export function getUnmetRequirements(developers: { [devId: string]: DeveloperSta
     const requirements = upgrades[upgradeId].requirements;
     let unmet: UpgradeRequirements = {};
 
-    for (let [devId, numRequired] of Object.entries(requirements)) {
+    for (const [devId, numRequired] of Object.entries(requirements)) {
         if (developers[devId].count < numRequired) {
             unmet[devId] = numRequired - developers[devId].count;
         }
@@ -27,7 +27,7 @@ export function getUnmetRequirements(developers: { [devId: string]: DeveloperSta
 export function getAvailableUpgrades(state: GameState): string[] {
     let available: string[] = [];
 
-    for (let [id, upgrade] of Object.entries(upgrades)) {
+    for (const [id, upgrade] of Object.entries(upgrades)) {
         const unmet = getUnmetRequirements(state.developers, id);
         const isAvailable = state.totalCommits >= upgrade.cost * availabilityCostMultiplier;
 
@@ -49,7 +49,7 @@ export function getAvailableDevelopers(state: GameState): string[] {
 function getDeveloperCommitRateMultiplier(state: GameState, devId: string): number {
     let multiplier = 1;
 
-    for (let [id, upgrade] of Object.entries(upgrades)) {
+    for (const [id, upgrade] of Object.entries(upgrades)) {
         if (!upgrade.modifiers[devId] || state.upgrades[id].status !== UpgradeStatus.Unlocked) {
             continue;
         }
@@ -70,12 +70,12 @@ export function getDeveloperCommitRate(state: GameState, devId: string): number 
 export function getCommitRate(state: GameState): number {
     let commitRate = 0, multiplier = 1;
 
-    for (let [id, developer] of Object.entries(state.developers)) {
+    for (const [id, developer] of Object.entries(state.developers)) {
         commitRate += getDeveloperCommitRate(state, id) * developer.count;
     }
 
-    for (let [id, upgrade] of Object.entries(state.upgrades)) {
-        let modifier = upgrades[id].modifiers.all;
+    for (const [id, upgrade] of Object.entries(state.upgrades)) {
+        const modifier = upgrades[id].modifiers.all;
 
         if (upgrade.status === UpgradeStatus.Unlocked && modifier) {
             multiplier += modifier.additiveMultiplier;
@@ -88,7 +88,7 @@ export function getCommitRate(state: GameState): number {
 export function getCommitsPerClick(state: GameState): number {
     let constant = 1, multiplier = 1;
 
-    for (let [id, upgrade] of Object.entries(state.upgrades)) {
+    for (const [id, upgrade] of Object.entries(state.upgrades)) {
         const modifier = upgrades[id].modifiers.player;
 
         if (upgrade.status !== UpgradeStatus.Unlocked || !modifier) {

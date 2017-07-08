@@ -66,6 +66,6 @@ export default class TeamPane extends Vue {
 
     developerCommitRate(id: string) {
         return (this.$store.getters.commitRateByDeveloper(id)
-                * this.$store.state.developers[id].count).toFixed(2);
+            * this.$store.state.developers[id].count).toFixed(2);
     }
 }

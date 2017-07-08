@@ -18,4 +18,4 @@ import ShopPane from "./shop";
         DevelopmentPane, TeamPane, ShopPane
     }
 })
-export default class App extends Vue {}
+export default class App extends Vue { }

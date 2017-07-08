@@ -26,7 +26,7 @@ export const upgrades: { [upgradeId: string]: Upgrade } = {
 export function getInitialUpgradeState(): { [upgradeId: string]: UpgradeState } {
     const result: { [upgradeId: string]: UpgradeState } = {};
 
-    for (const upgradeId in upgrades) {
+    for (const [upgradeId, upgrade] of Object.entries(upgrades)) {
         result[upgradeId] = {
             status: UpgradeStatus.Locked,
         };

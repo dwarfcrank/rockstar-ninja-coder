@@ -67,7 +67,8 @@ export function getDeveloperCommitRate(state: GameState, devId: string): number 
 }
 
 export function getCommitRate(state: GameState): number {
-    let commitRate = 0, multiplier = 1;
+    let commitRate = 0;
+    let multiplier = 1;
 
     for (const [id, developer] of Object.entries(state.developers)) {
         commitRate += getDeveloperCommitRate(state, id) * developer.count;
@@ -85,7 +86,8 @@ export function getCommitRate(state: GameState): number {
 }
 
 export function getCommitsPerClick(state: GameState): number {
-    let constant = 1, multiplier = 1;
+    let constant = 1;
+    let multiplier = 1;
 
     for (const [id, upgrade] of Object.entries(state.upgrades)) {
         const modifier = upgrades[id].modifiers.player;

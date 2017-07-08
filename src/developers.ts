@@ -75,12 +75,12 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
 export function getInitialDeveloperState(): { [devId: string]: DeveloperState } {
     const result: { [devId: string]: DeveloperState } = {};
 
-    for (const devId in developerTypes) {
+    for (const [devId, dev] of Object.entries(developerTypes)) {
         result[devId] = {
             count: 0,
             available: false,
-            cost: developerTypes[devId].initialCost,
-            commitRate: developerTypes[devId].baseCommitRate,
+            cost: dev.initialCost,
+            commitRate: dev.baseCommitRate,
         };
     }
 

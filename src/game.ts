@@ -1,8 +1,7 @@
 import _ from "lodash";
-import { upgrades, UpgradeState, UpgradeRequirements } from "./upgrades";
+import { upgrades, UpgradeState, UpgradeRequirements, UpgradeStatus } from "./upgrades";
 import { developerTypes, DeveloperState } from "./developers";
 import { availabilityCostMultiplier } from "./constants";
-import { UpgradeStatus } from "./upgrades";
 
 export interface GameState {
     totalCommits: number;

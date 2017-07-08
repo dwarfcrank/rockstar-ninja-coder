@@ -7,13 +7,13 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 750,
         modifiers: {
             all: {
-                additiveMultiplier: 0.04
-            }
+                additiveMultiplier: 0.04,
+            },
         },
         requirements: {
             intern: 15,
-            juniorSwEng: 15
-        }
+            juniorSwEng: 15,
+        },
     },
 
     thinkpads: {
@@ -22,13 +22,13 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 1000,
         modifiers: {
             all: {
-                additiveMultiplier: 0.05
-            }
+                additiveMultiplier: 0.05,
+            },
         },
         requirements: {
             intern: 20,
-            juniorSwEng: 20
-        }
+            juniorSwEng: 20,
+        },
     },
 
     coffeeMachine: {
@@ -37,10 +37,10 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 3000,
         modifiers: {
             all: {
-                additiveMultiplier: 0.05
-            }
+                additiveMultiplier: 0.05,
+            },
         },
-        requirements: {}
+        requirements: {},
     },
 
 };

@@ -2,8 +2,8 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import DevelopmentPane from "./development";
-import TeamPane from "./team";
 import ShopPane from "./shop";
+import TeamPane from "./team";
 
 @Component({
     template: `
@@ -15,7 +15,7 @@ import ShopPane from "./shop";
         `,
 
     components: {
-        DevelopmentPane, TeamPane, ShopPane
-    }
+        DevelopmentPane, TeamPane, ShopPane,
+    },
 })
 export default class App extends Vue { }

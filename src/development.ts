@@ -1,6 +1,6 @@
-import { mapState, mapMutations } from "vuex";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { mapMutations, mapState } from "vuex";
 
 @Component({
     template: `
@@ -19,7 +19,7 @@ import Component from "vue-class-component";
                 </div>
             </div>
         </div>
-        `
+        `,
 })
 export default class DevelopmentPane extends Vue {
     get totalCommits() {

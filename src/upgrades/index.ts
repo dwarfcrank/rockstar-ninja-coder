@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { Upgrade, UpgradeState, UpgradeStatus } from "./types";
 
+import cProgrammerUpgrades from "./cProgrammer";
+import generalUpgrades from "./general";
 import internUpgrades from "./intern";
 import juniorSwEngUpgrades from "./juniorSwEng";
-import swEngineerUpgrades from "./swEngineer";
-import cProgrammerUpgrades from "./cProgrammer";
-import rustaceanUpgrades from "./rustacean";
 import leetHaxorUpgrades from "./leetHaxor";
 import playerUpgrades from "./player";
-import generalUpgrades from "./general";
+import rustaceanUpgrades from "./rustacean";
+import swEngineerUpgrades from "./swEngineer";
 
 export * from "./types";
 
@@ -20,15 +20,15 @@ export const upgrades: { [upgradeId: string]: Upgrade } = {
     ...rustaceanUpgrades,
     ...leetHaxorUpgrades,
     ...playerUpgrades,
-    ...generalUpgrades
+    ...generalUpgrades,
 };
 
 export function getInitialUpgradeState(): { [upgradeId: string]: UpgradeState } {
-    let result: { [upgradeId: string]: UpgradeState } = {};
+    const result: { [upgradeId: string]: UpgradeState } = {};
 
-    for (let upgradeId in upgrades) {
+    for (const upgradeId in upgrades) {
         result[upgradeId] = {
-            status: UpgradeStatus.Locked
+            status: UpgradeStatus.Locked,
         };
     }
 

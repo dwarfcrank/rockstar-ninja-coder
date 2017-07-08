@@ -7,12 +7,12 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 50,
         modifiers: {
             intern: {
-                multiplier: 0.02
-            }
+                multiplier: 0.02,
+            },
         },
         requirements: {
-            intern: 10
-        }
+            intern: 10,
+        },
     },
 
     energyDrinks: {
@@ -21,13 +21,13 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 250,
         modifiers: {
             intern: {
-                multiplier: 0.10
-            }
+                multiplier: 0.10,
+            },
         },
         requirements: {
-            intern: 20
-        }
-    }
+            intern: 20,
+        },
+    },
 };
 
 export default upgrades;

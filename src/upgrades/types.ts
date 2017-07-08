@@ -1,7 +1,7 @@
 export const enum UpgradeStatus {
     Locked,
     Available,
-    Unlocked
+    Unlocked,
 }
 
 export interface UpgradeModifier {
@@ -23,5 +23,5 @@ export interface Upgrade {
 }
 
 export interface UpgradeState {
-    status: UpgradeStatus
+    status: UpgradeStatus;
 }

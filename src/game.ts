@@ -1,7 +1,7 @@
 import _ from "lodash";
-import { upgrades, UpgradeState, UpgradeRequirements, UpgradeStatus } from "./upgrades";
-import { developerTypes, DeveloperState } from "./developers";
 import { availabilityCostMultiplier } from "./constants";
+import { DeveloperState, developerTypes } from "./developers";
+import { UpgradeRequirements, upgrades, UpgradeState, UpgradeStatus } from "./upgrades";
 
 export interface GameState {
     totalCommits: number;
@@ -12,7 +12,7 @@ export interface GameState {
 
 export function getUnmetRequirements(developers: { [devId: string]: DeveloperState }, upgradeId: string): UpgradeRequirements {
     const requirements = upgrades[upgradeId].requirements;
-    let unmet: UpgradeRequirements = {};
+    const unmet: UpgradeRequirements = {};
 
     for (const [devId, numRequired] of Object.entries(requirements)) {
         if (developers[devId].count < numRequired) {
@@ -24,7 +24,7 @@ export function getUnmetRequirements(developers: { [devId: string]: DeveloperSta
 }
 
 export function getAvailableUpgrades(state: GameState): string[] {
-    let available: string[] = [];
+    const available: string[] = [];
 
     for (const [id, upgrade] of Object.entries(upgrades)) {
         const unmet = getUnmetRequirements(state.developers, id);

@@ -7,13 +7,13 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 1337,
         modifiers: {
             leetHaxor: {
-                multiplier: 0.15
-            }
+                multiplier: 0.15,
+            },
         },
         requirements: {
-            leetHaxor: 10
-        }
-    }
+            leetHaxor: 10,
+        },
+    },
 };
 
 export default upgrades;

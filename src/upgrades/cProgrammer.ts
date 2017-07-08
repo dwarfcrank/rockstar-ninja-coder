@@ -7,12 +7,12 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 10000,
         modifiers: {
             cProgrammer: {
-                multiplier: 0.07
-            }
+                multiplier: 0.07,
+            },
         },
         requirements: {
-            cProgrammer: 10
-        }
+            cProgrammer: 10,
+        },
     },
 };
 

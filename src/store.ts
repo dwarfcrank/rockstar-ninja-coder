@@ -1,24 +1,24 @@
 import _ from "lodash";
 import Vue from "vue";
 import Vuex from "vuex";
-import { getInitialDeveloperState, DeveloperState } from "./developers";
-import { getInitialUpgradeState, upgrades } from "./upgrades";
-import { GameState, getAvailableUpgrades, getAvailableDevelopers, getDeveloperCommitRate, getCommitRate, getCommitsPerClick } from "./game";
 import { developerCostGrowth } from "./constants";
+import { DeveloperState, getInitialDeveloperState } from "./developers";
+import { GameState, getAvailableDevelopers, getAvailableUpgrades, getCommitRate, getCommitsPerClick, getDeveloperCommitRate } from "./game";
+import { getInitialUpgradeState, upgrades } from "./upgrades";
 import { UpgradeStatus } from "./upgrades";
 
 Vue.use(Vuex);
 
 function updateAvailability(state: GameState) {
     getAvailableUpgrades(state)
-        .forEach(upgradeId => {
+        .forEach((upgradeId) => {
             if (state.upgrades[upgradeId].status !== UpgradeStatus.Unlocked) {
                 state.upgrades[upgradeId].status = UpgradeStatus.Available;
             }
         });
 
     getAvailableDevelopers(state)
-        .forEach(devId => state.developers[devId].available = true);
+        .forEach((devId) => state.developers[devId].available = true);
 }
 
 function getInitialState(): GameState {
@@ -32,7 +32,7 @@ function getInitialState(): GameState {
         totalCommits: 0,
         allTimeCommits: 0,
         developers: getInitialDeveloperState(),
-        upgrades: getInitialUpgradeState()
+        upgrades: getInitialUpgradeState(),
     };
 }
 
@@ -58,7 +58,7 @@ const store = new Vuex.Store({
 
         commitRate: (state: GameState): number => getCommitRate(state),
 
-        commitsPerClick: (state: GameState): number => getCommitsPerClick(state)
+        commitsPerClick: (state: GameState): number => getCommitsPerClick(state),
     },
 
     mutations: {
@@ -77,8 +77,8 @@ const store = new Vuex.Store({
         buyUpgrade(state: GameState, upgradeId: string) {
             state.totalCommits -= upgrades[upgradeId].cost;
             state.upgrades[upgradeId].status = UpgradeStatus.Unlocked;
-        }
-    }
+        },
+    },
 });
 
 export default store;

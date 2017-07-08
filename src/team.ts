@@ -37,7 +37,7 @@ import { developerTypes } from "./developers";
                 </div>
             </div>
         </div>
-        `
+        `,
 })
 export default class TeamPane extends Vue {
     get commitRate() {

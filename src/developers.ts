@@ -19,7 +19,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "Intern",
         description: "Wrote a Hello World in Python recently.",
         initialCost: 10,
-        baseCommitRate: 1
+        baseCommitRate: 1,
     },
 
     juniorSwEng: {
@@ -27,7 +27,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "Junior Software Engineer",
         description: "Still unsullied by enterprise Java.",
         initialCost: 150,
-        baseCommitRate: 3
+        baseCommitRate: 3,
     },
 
     swEngineer: {
@@ -35,7 +35,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "Software Engineer",
         description: "Knows the standard library and isn't afraid to use it.",
         initialCost: 500,
-        baseCommitRate: 10
+        baseCommitRate: 10,
     },
 
     leetHaxor: {
@@ -43,7 +43,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "1337 h4x0r",
         description: "Eats bytecode for breakfast.",
         initialCost: 1337,
-        baseCommitRate: 13.37
+        baseCommitRate: 13.37,
     },
 
     seniorSwEng: {
@@ -51,7 +51,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "Senior Software Engineer",
         description: "Actually designs their code before writing it.",
         initialCost: 2000,
-        baseCommitRate: 18
+        baseCommitRate: 18,
     },
 
     cProgrammer: {
@@ -59,7 +59,7 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "C Programmer",
         description: "Uses the K&R book as a pillow.",
         initialCost: 3000,
-        baseCommitRate: 30
+        baseCommitRate: 30,
     },
 
     rustacean: {
@@ -67,20 +67,20 @@ export const developerTypes: { [devId: string]: DeveloperType } = {
         title: "The Rustacean",
         description: "Here to rewrite everything in Rust.",
         initialCost: 5000,
-        baseCommitRate: 100
-    }
+        baseCommitRate: 100,
+    },
 };
 
 // Helper to keep the initial state object in sync with developerTypes.
 export function getInitialDeveloperState(): { [devId: string]: DeveloperState } {
-    let result: { [devId: string]: DeveloperState } = {};
+    const result: { [devId: string]: DeveloperState } = {};
 
-    for (let devId in developerTypes) {
+    for (const devId in developerTypes) {
         result[devId] = {
             count: 0,
             available: false,
             cost: developerTypes[devId].initialCost,
-            commitRate: developerTypes[devId].baseCommitRate
+            commitRate: developerTypes[devId].baseCommitRate,
         };
     }
 

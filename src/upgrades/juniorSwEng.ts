@@ -7,12 +7,12 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 500,
         modifiers: {
             juniorSwEng: {
-                multiplier: 0.04
-            }
+                multiplier: 0.04,
+            },
         },
         requirements: {
-            juniorSwEng: 10
-        }
+            juniorSwEng: 10,
+        },
     },
 
     typeScript: {
@@ -21,12 +21,12 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 2500,
         modifiers: {
             juniorSwEng: {
-                multiplier: 0.10
-            }
+                multiplier: 0.10,
+            },
         },
         requirements: {
-            juniorSwEng: 25
-        }
+            juniorSwEng: 25,
+        },
     },
 
 };

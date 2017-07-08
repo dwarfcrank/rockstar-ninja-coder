@@ -7,10 +7,10 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 100,
         modifiers: {
             player: {
-                constantAddition: 1
-            }
+                constantAddition: 1,
+            },
         },
-        requirements: {}
+        requirements: {},
     },
 
     crispr: {
@@ -19,11 +19,11 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 5000,
         modifiers: {
             player: {
-                multiplier: 1.50
-            }
+                multiplier: 1.50,
+            },
         },
-        requirements: {}
-    }
+        requirements: {},
+    },
 };
 
 export default upgrades;

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 import { developerTypes } from "./developers";
 import { upgrades, UpgradeStatus } from "./upgrades";
 
@@ -22,7 +22,7 @@ interface UpgradeItemModel {
 
 @Component({
     props: {
-        developerModel: {}
+        developerModel: {},
     },
 
     template: `
@@ -66,7 +66,7 @@ class DeveloperItem extends Vue {
 
 @Component({
     props: {
-        upgradeModel: {}
+        upgradeModel: {},
     },
 
     template: `
@@ -84,7 +84,7 @@ class DeveloperItem extends Vue {
                 </div>
             </div>
         </div>
-        `
+        `,
 })
 class UpgradeItem extends Vue {
     upgradeModel: UpgradeItemModel;
@@ -131,28 +131,28 @@ class UpgradeItem extends Vue {
 
     components: {
         DeveloperItem,
-        UpgradeItem
-    }
+        UpgradeItem,
+    },
 })
 export default class ShopPane extends Vue {
     get developerTypesSorted(): DeveloperItemModel[] {
         return Object.keys(this.$store.state.developers)
-            .map(id => ({
+            .map((id) => ({
                 id,
                 ...developerTypes[id],
-                ...this.$store.state.developers[id]
+                ...this.$store.state.developers[id],
             }))
             .sort((a, b) => developerTypes[a.id].rank - developerTypes[b.id].rank);
     }
 
     get upgradesSorted(): UpgradeItemModel[] {
         return Object.keys(this.$store.state.upgrades)
-            .map(id => ({
+            .map((id) => ({
                 id,
                 ...upgrades[id],
                 ...this.$store.state.upgrades[id],
-                available: this.$store.state.upgrades[id].status === UpgradeStatus.Available
+                available: this.$store.state.upgrades[id].status === UpgradeStatus.Available,
             }))
             .sort((a, b) => upgrades[a.id].cost - upgrades[b.id].cost);
     }
-};
+}

@@ -7,12 +7,12 @@ const upgrades: { [upgradeId: string]: Upgrade } = {
         cost: 15000,
         modifiers: {
             rustacean: {
-                multiplier: 0.07
-            }
+                multiplier: 0.07,
+            },
         },
         requirements: {
-            rustacean: 10
-        }
+            rustacean: 10,
+        },
     },
 
 };

@@ -68,22 +68,19 @@ export function getDeveloperCommitRate(state: GameState, devId: string): number 
 }
 
 export function getCommitRate(state: GameState): number {
-    const commitRate = _.reduce(state.developers,
-        (result: number, dev: DeveloperState, devId: string) =>
-            result + getDeveloperCommitRate(state, devId) * dev.count,
-        0);
+    let commitRate = 0, multiplier = 1;
 
-    const multiplier = _.reduce(state.upgrades,
-        (result: number, upgrade: UpgradeState, upgradeId: string) => {
-            const modifier = upgrades[upgradeId].modifiers["all"];
+    for (let [id, developer] of Object.entries(state.developers)) {
+        commitRate += getDeveloperCommitRate(state, id) * developer.count;
+    }
 
-            if (upgrade.status !== UpgradeStatus.Unlocked || !modifier) {
-                return result;
-            }
+    for (let [id, upgrade] of Object.entries(state.upgrades)) {
+        let modifier = upgrades[id].modifiers.all;
 
-            return result + modifier.additiveMultiplier;
-        },
-        1);
+        if (upgrade.status === UpgradeStatus.Unlocked && modifier) {
+            multiplier += modifier.additiveMultiplier;
+        }
+    }
 
     return commitRate * multiplier;
 }

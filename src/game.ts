@@ -53,7 +53,7 @@ function getDeveloperCommitRateMultiplier(state: GameState, devId: string): numb
             continue;
         }
 
-        multiplier *= (upgrade.modifiers[devId].multiplier + 1);
+        multiplier *= (upgrade.modifiers[devId].multiplier! + 1);
     }
 
     return multiplier;
@@ -77,7 +77,7 @@ export function getCommitRate(state: GameState): number {
         const modifier = upgrades[id].modifiers.all;
 
         if (upgrade.status === UpgradeStatus.Unlocked && modifier) {
-            multiplier += modifier.additiveMultiplier;
+            multiplier += modifier.additiveMultiplier!;
         }
     }
 

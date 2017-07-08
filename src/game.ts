@@ -86,20 +86,18 @@ export function getCommitRate(state: GameState): number {
 }
 
 export function getCommitsPerClick(state: GameState): number {
-    const { multiplier, constant } = _.reduce(state.upgrades,
-        (result: any, upgrade: UpgradeState, upgradeId: string) => {
-            const modifier = upgrades[upgradeId].modifiers["player"];
+    let constant = 1, multiplier = 1;
 
-            if (upgrade.status !== UpgradeStatus.Unlocked || !modifier) {
-                return result;
-            }
+    for (let [id, upgrade] of Object.entries(state.upgrades)) {
+        const modifier = upgrades[id].modifiers.player;
 
-            return {
-                constant: result.constant + (modifier.constantAddition || 0),
-                multiplier: result.multiplier * (modifier.multiplier || 1)
-            };
-        },
-        { multiplier: 1, constant: 1 });
+        if (upgrade.status !== UpgradeStatus.Unlocked || !modifier) {
+            continue;
+        }
+
+        constant += (modifier.constantAddition || 0);
+        multiplier *= (modifier.multiplier || 1);
+    }
 
     return constant * multiplier;
 }

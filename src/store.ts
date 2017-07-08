@@ -21,13 +21,23 @@ function updateAvailability(state: GameState) {
         .forEach(devId => state.developers[devId].available = true);
 }
 
-const store = new Vuex.Store({
-    state: {
+function getInitialState(): GameState {
+    const savedStateJson = localStorage.getItem("gameState");
+
+    if (savedStateJson) {
+        return JSON.parse(savedStateJson) as GameState;
+    }
+
+    return {
         totalCommits: 0,
         allTimeCommits: 0,
         developers: getInitialDeveloperState(),
         upgrades: getInitialUpgradeState()
-    },
+    };
+}
+
+const store = new Vuex.Store({
+    state: getInitialState(),
 
     getters: {
         canHireDeveloper: (state: GameState, getters) => (id: string): boolean => {

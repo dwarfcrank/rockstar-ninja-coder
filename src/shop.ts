@@ -45,7 +45,7 @@ interface UpgradeItemModel {
        `,
 })
 class DeveloperItem extends Vue {
-    developerModel: DeveloperItemModel;
+    private developerModel: DeveloperItemModel;
 
     get canHire() {
         return this.$store.getters.canHireDeveloper(this.developerModel.id);
@@ -55,7 +55,7 @@ class DeveloperItem extends Vue {
         return this.$store.getters.commitRateByDeveloper(this.developerModel.id).toFixed(2);
     }
 
-    onClick() {
+    private onClick() {
         if (!this.$store.getters.canHireDeveloper(this.developerModel.id)) {
             return;
         }
@@ -87,13 +87,13 @@ class DeveloperItem extends Vue {
         `,
 })
 class UpgradeItem extends Vue {
-    upgradeModel: UpgradeItemModel;
+    private upgradeModel: UpgradeItemModel;
 
     get canBuy() {
         return this.$store.getters.canBuyUpgrade(this.upgradeModel.id);
     }
 
-    onClick() {
+    private onClick() {
         if (!this.$store.getters.canBuyUpgrade(this.upgradeModel.id)) {
             return;
         }
@@ -111,7 +111,11 @@ class UpgradeItem extends Vue {
                         <h3 class="panel-title">Upgrades</h3>
                     </div>
                     <div class="list-group">
-                        <upgrade-item v-for="upgrade in upgradesSorted" v-if="upgrade.available" :key="upgrade.id" v-bind:upgrade-model="upgrade" />
+                        <upgrade-item
+                            v-for="upgrade in upgradesSorted"
+                            v-if="upgrade.available"
+                            :key="upgrade.id"
+                            v-bind:upgrade-model="upgrade" />
                     </div>
                 </div>
             </div>
@@ -122,7 +126,10 @@ class UpgradeItem extends Vue {
                         <h3 class="panel-title">Human Resources</h3>
                     </div>
                     <div class="list-group">
-                        <developer-item v-for="developer in developerTypesSorted" v-if="developer.available" :key="developer.id" v-bind:developer-model="developer" />
+                        <developer-item
+                            v-for="developer in developerTypesSorted"
+                            v-if="developer.available" :key="developer.id"
+                            v-bind:developer-model="developer" />
                     </div>
                 </div>
             </div>

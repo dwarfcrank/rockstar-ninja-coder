@@ -13,7 +13,9 @@ import { mapMutations, mapState } from "vuex";
                     <div class="panel-body">
                         <p class="text-center">{{ totalCommits }} commits</p>
                         <p class="text-center">
-                            <button v-on:click="onClick" type="button" class="btn btn-primary btn-lg">$ git commit -m "yolo"</button>
+                            <button v-on:click="onClick" type="button" class="btn btn-primary btn-lg">
+                                $ git commit -m "yolo"
+                            </button>
                         </p>
                     </div>
                 </div>
@@ -26,7 +28,7 @@ export default class DevelopmentPane extends Vue {
         return this.$store.state.totalCommits.toFixed(2);
     }
 
-    onClick() {
+    private onClick() {
         this.$store.commit("addCommits", this.$store.getters.commitsPerClick);
     }
 }

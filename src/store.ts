@@ -3,7 +3,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { developerCostGrowth } from "./constants";
 import { DeveloperState, getInitialDeveloperState } from "./developers";
-import { GameState, getAvailableDevelopers, getAvailableUpgrades, getCommitRate, getCommitsPerClick, getDeveloperCommitRate } from "./game";
+import { GameState, getAvailableDevelopers, getAvailableUpgrades, getCommitRate,
+         getCommitsPerClick, getDeveloperCommitRate } from "./game";
 import { getInitialUpgradeState, upgrades } from "./upgrades";
 import { UpgradeStatus } from "./upgrades";
 

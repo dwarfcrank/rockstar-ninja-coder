@@ -10,7 +10,8 @@ export interface GameState {
     upgrades: { [upgradeId: string]: UpgradeState };
 }
 
-export function getUnmetRequirements(developers: { [devId: string]: DeveloperState }, upgradeId: string): UpgradeRequirements {
+export function getUnmetRequirements(developers: { [devId: string]: DeveloperState },
+                                     upgradeId: string): UpgradeRequirements {
     const requirements = upgrades[upgradeId].requirements;
     const unmet: UpgradeRequirements = {};
 
